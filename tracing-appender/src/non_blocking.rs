@@ -242,6 +242,7 @@ impl Default for NonBlockingBuilder {
 }
 
 impl std::io::Write for NonBlocking {
+    // MEMO: chanを使って, bufを別スレッドに送信している
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let buf_size = buf.len();
         if self.is_lossy {

@@ -308,6 +308,7 @@ where
         }
     }
 
+    // MEMO: layerdの場合は, 中のsubscriberの `on_event` を呼ぶだけ
     #[inline]
     fn on_event(&self, event: &Event<'_>, ctx: Context<'_, C>) {
         self.inner.on_event(event, ctx.clone());

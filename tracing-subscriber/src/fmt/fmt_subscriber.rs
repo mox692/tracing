@@ -942,7 +942,9 @@ where
         }
     }
 
+    // MEMO: fmt_subscriberを使った際のeventハンドラ
     fn on_event(&self, event: &Event<'_>, ctx: Context<'_, C>) {
+        // MEMO: thread localでbufを作る. 普通のlocal変数ではだめ？
         thread_local! {
             static BUF: RefCell<String> = const { RefCell::new(String::new()) };
         }
@@ -972,6 +974,8 @@ where
                 )
                 .is_ok()
             {
+                // TODO: writeはどこで作成される？
+                // -> e.g. tracing-subscriber/src/fmt/fmt_subscriber.rs の with_writerとか
                 let mut writer = self.make_writer.make_writer_for(event.metadata());
                 let res = io::Write::write_all(&mut writer, buf.as_bytes());
                 if self.log_internal_errors {
