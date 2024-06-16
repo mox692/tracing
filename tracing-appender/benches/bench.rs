@@ -4,7 +4,7 @@ use std::{
     time::Instant,
 };
 use tracing::{event, Level};
-use tracing_appender::non_blocking;
+use tracing_appender::{non_blocking, rolling::RollingFileAppender};
 use tracing_subscriber::fmt::MakeWriter;
 
 // a no-op writer is used in order to measure the overhead incurred by
@@ -90,6 +90,23 @@ fn non_blocking_benchmark(c: &mut Criterion) {
 
         tracing::collect::with_default(subscriber.finish(), || {
             b.iter(|| event!(Level::INFO, "event"))
+        });
+    });
+
+    group.bench_function("single_thread_rolling_file_appender", |b| {
+        let worker_log_rolling_appender = RollingFileAppender::builder()
+            .max_log_files(1)
+            .build(".")
+            .unwrap();
+
+        let (non_blocking, _guard) = non_blocking(worker_log_rolling_appender);
+        let subscriber = tracing_subscriber::fmt().with_writer(non_blocking);
+
+        tracing::collect::with_default(subscriber.finish(), || {
+            b.iter(|| {
+                // ここの, eventが返るスピードは速いんだけど, 裏で結構詰まってる可能性はある
+                event!(Level::INFO, "event")
+            })
         });
     });
 

@@ -25,6 +25,7 @@ pub fn for_all_recording(
         group.bench_function("scoped_recording", &mut iter);
     });
 
+    // TODOS: なんで計測するとこのglobalの方が早いんだろう？
     // finally, set a global default collector, and run the benchmarks again.
     tracing::collect::set_global_default(EnabledCollector)
         .expect("global default should not have already been set!");

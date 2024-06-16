@@ -1141,6 +1141,7 @@ pub mod __macro_support {
             crate::Span::none()
         }
 
+        // MEMO: ここがtracing crateとlog crateの境界
         #[cfg(feature = "log")]
         pub fn log(
             &self,
@@ -1150,6 +1151,7 @@ pub mod __macro_support {
         ) {
             let meta = self.metadata();
             logger.log(
+                // MEMO: ここで, log crateのbuilderを使ってlogを構成している
                 &crate::log::Record::builder()
                     .file(meta.file())
                     .module_path(meta.module_path())

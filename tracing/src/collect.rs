@@ -38,6 +38,7 @@ pub fn set_global_default<C>(collector: C) -> Result<(), SetGlobalDefaultError>
 where
     C: Collect + Send + Sync + 'static,
 {
+    // MEMO: 中でregister_dispatch::new()をしている
     crate::dispatch::set_global_default(crate::Dispatch::new(collector))
 }
 
