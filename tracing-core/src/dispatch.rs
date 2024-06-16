@@ -502,6 +502,7 @@ where
     f(get_global())
 }
 
+// MEMO: dispatchが取得sされるのは主にここ
 #[inline(always)]
 pub(crate) fn get_global() -> &'static Dispatch {
     if GLOBAL_INIT.load(Ordering::Acquire) != INITIALIZED {
@@ -751,6 +752,7 @@ impl Dispatch {
     #[inline]
     pub fn event(&self, event: &Event<'_>) {
         let collector = self.collector();
+        // MEMO: ここでの Collect の具体型は Layered など
         if collector.event_enabled(event) {
             collector.event(event);
         }
