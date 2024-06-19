@@ -1,0 +1,33 @@
+[package]
+name = "tracing-flight-recorder"
+version = "0.2.0"
+authors = ["Tokio Contributors <team@tokio.rs>"]
+edition = "2018"
+repository = "https://github.com/tokio-rs/tracing"
+homepage = "https://tokio.rs"
+description = """
+Provides compatibility between `tracing` and the `log` crate.
+"""
+categories = [
+    "development-tools::debugging",
+    "asynchronous",
+]
+keywords = ["logging", "tracing", "log"]
+license = "MIT"
+readme = "README.md"
+rust-version = "1.63.0"
+
+[features]
+default = []
+
+[dependencies]
+tracing = { path = "../tracing", version = "0.1"}
+tracing-core = { path = "../tracing-core", version = "0.1"}
+tracing-subscriber = { path = "../tracing-subscriber", version = "0.3", features = ["json", "env-filter"] }
+
+[badges]
+maintenance = { status = "actively-maintained" }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
